@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -90,6 +91,24 @@ public class CategoriesFragment extends ListFragment {
         this.setListAdapter(new ArrayAdapter<String>(getContext(),  android.R.layout.simple_list_item_1, listcategory));
 
     }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        MenuFragment menuFragment = new MenuFragment();
+
+        Bundle args = new Bundle();
+        args.putString("category", String.valueOf(l.getItemAtPosition(position)));
+        menuFragment.setArguments(args);
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, menuFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
