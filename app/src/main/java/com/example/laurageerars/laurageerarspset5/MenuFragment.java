@@ -113,8 +113,10 @@ public class MenuFragment extends ListFragment {
                     db.insert(menucategory.get(o).getString("name"), menucategory.get(o).getInt("price"), 1);
 
                 }
+
             } catch (JSONException e) {
                 e.printStackTrace();
+                
             }
 
         }
