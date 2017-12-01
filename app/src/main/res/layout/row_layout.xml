@@ -7,40 +7,60 @@
     android:orientation="horizontal"
     android:layout_height="match_parent">
 
-    <TextView
-    android:id="@+id/OrderItem"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:layout_weight="5"
-    android:padding="10dp"
-    android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/OrderAmount"
-        android:layout_width="match_parent"
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="2dp"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_weight="10"
-        android:padding="10dp"
-        android:textSize="20sp" />
+        android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/OrderPrice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_weight="10"
-        android:padding="10dp"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/OrderItem"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="5"
+            android:gravity="center_vertical|center_horizontal"
+            android:padding="10dp"
+            android:text="Grilled Steelhead Trout Sandwich"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/OrderAmount"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/OrderTotalPrice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_weight="10"
-        android:padding="10dp"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/OrderAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="10"
+            android:gravity="center_vertical|center"
+            android:padding="10dp"
+            android:text="1"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/OrderTotalPrice"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/OrderTotalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="10"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="12"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
 </LinearLayout>

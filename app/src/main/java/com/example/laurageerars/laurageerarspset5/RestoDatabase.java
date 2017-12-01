@@ -50,7 +50,7 @@ public class RestoDatabase extends SQLiteOpenHelper {
 
     public void insert(String name, int price){
         SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM orders WHERE name = '" + name.toString() + "'", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM orders", null);
         ContentValues values =  new ContentValues();
         if (cursor != null && cursor.moveToFirst()) {
             Integer amountnumber = cursor.getInt(cursor.getColumnIndex("amount"));

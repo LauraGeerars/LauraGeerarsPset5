@@ -36,7 +36,7 @@ import java.util.Objects;
  */
 public class MenuFragment extends ListFragment {
     public ArrayList<String> menucategory = new ArrayList<String>();
-    //public ArrayList<Integer> menuprice = new ArrayList<>();
+    public ArrayList<JSONObject> menucomplete = new ArrayList<JSONObject>();
     String CategoryMenu;
 
 
@@ -60,16 +60,10 @@ public class MenuFragment extends ListFragment {
                                 JSONObject newObject = (JSONObject) new JSONTokener(response).nextValue();
                                 JSONArray menuArray = newObject.getJSONArray("items");
                                 for (int i = 0; i < menuArray.length(); i++) {
-                                    //listmenu.add(menuArray.getJSONObject(i));
-                                    //mTextView.setText(menuArray.getJSONObject(i).getString("name"));
                                     if (Objects.equals(menuArray.getJSONObject(i).getString("category"), CategoryMenu)) {
-                                        //addItem(menuArray.getJSONObject(i).getString("name"));
                                         //String temp = menuArray.getJSONObject(i).getString("name") + " - € " + menuArray.getJSONObject(i).getString("price");
                                         addItem(menuArray.getJSONObject(i).getString("name"));
-                                        //menucategory.add(menuArray.getJSONObject(i).getString("name"));
-                                        //menucategory.add(menuArray.getJSONObject(i).getString("price"));
-                                        //addPrice(menuArray.getJSONObject(i).getString("name"), menuArray.getJSONObject(i).getString("price"));
-
+                                        menucomplete.add(menuArray.getJSONObject(i));
                                     }
                                 }
 
@@ -126,12 +120,23 @@ public class MenuFragment extends ListFragment {
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
-        //db.insert(String.valueOf(l.getItemAtPosition(position)), price);
-        //db.insert(item, price);
+        for (int s = 0; s < menucomplete.size(); s++) {
+            try {
+                if (Objects.equals(menucomplete.get(s).getString("name"), item.toString())) {
+                    int price = menucomplete.get(s).getInt("price");
+                    db.insert(item.toString(), price);
+                }
+            }
 
+            catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
 
         }
+
+
 
 
         @Override

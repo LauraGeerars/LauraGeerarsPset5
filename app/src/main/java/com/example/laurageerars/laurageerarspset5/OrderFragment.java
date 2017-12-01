@@ -53,16 +53,15 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
+        RestoDatabase db = RestoDatabase.getInstance(getContext());
         switch (v.getId()) {
             case R.id.sendOrder:
                 db.clear();
                 submitOrder();
                 updateData();
-                break;
             case R.id.cancelOrder:
                 db.clear();
                 updateData();
-                break;
         }
     }
 
