@@ -2,6 +2,7 @@ package com.example.laurageerars.laurageerarspset5;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,6 +36,7 @@ import java.util.Objects;
  */
 public class MenuFragment extends ListFragment {
     public ArrayList<String> menucategory = new ArrayList<String>();
+    //public ArrayList<Integer> menuprice = new ArrayList<>();
     String CategoryMenu;
 
 
@@ -63,11 +66,14 @@ public class MenuFragment extends ListFragment {
                                         //addItem(menuArray.getJSONObject(i).getString("name"));
                                         //String temp = menuArray.getJSONObject(i).getString("name") + " - € " + menuArray.getJSONObject(i).getString("price");
                                         addItem(menuArray.getJSONObject(i).getString("name"));
-                                        //listmenu.add(menuArray.getJSONObject(i).getString("name"));
+                                        //menucategory.add(menuArray.getJSONObject(i).getString("name"));
+                                        //menucategory.add(menuArray.getJSONObject(i).getString("price"));
+                                        //addPrice(menuArray.getJSONObject(i).getString("name"), menuArray.getJSONObject(i).getString("price"));
+
                                     }
                                 }
 
-                                Adapter();
+                                Adapter(menucategory);
 
 
                             } catch (JSONException e) {
@@ -95,8 +101,17 @@ public class MenuFragment extends ListFragment {
 
         menucategory.add(Item);
     }
+/*
+    public void addPrice(String Item, String price) {
 
-    public void Adapter() {
+        SharedPreferences yourOrderPrefs = getContext().getSharedPreferences("PriceStore", getContext().MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = yourOrderPrefs.edit();
+        prefsEditor.putString(Item, price);
+        prefsEditor.commit();
+
+    }*/
+
+    public void Adapter(ArrayList<String> menucategory) {
         this.setListAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, menucategory));
 
     }
@@ -104,23 +119,20 @@ public class MenuFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+        RestoDatabase db = RestoDatabase.getInstance(getContext());
+        String item = String.valueOf(l.getItemAtPosition(position));
+        String text = item + " has been added to your order!";
         Context context = getContext();
-        String orderItems = l.getItemAtPosition(position).toString();
-        for (int o = 0; o < menucategory.size(); o++) {
-            try {
-                if (Objects.equals(menucategory.get(o).getString("name"), orderItems.toString())) {
-                    RestoDatabase db = RestoDatabase.getInstance(getContext());
-                    db.insert(menucategory.get(o).getString("name"), menucategory.get(o).getInt("price"), 1);
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+        //db.insert(String.valueOf(l.getItemAtPosition(position)), price);
+        //db.insert(item, price);
 
-                }
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-                
-            }
 
         }
-    }
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,

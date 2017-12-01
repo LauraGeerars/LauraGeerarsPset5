@@ -24,7 +24,20 @@ public class RestoAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView item = view.findViewById(R.id.OrderItem);
+        TextView amount = view.findViewById(R.id.OrderAmount);
+        TextView price = view.findViewById(R.id.OrderPrice);
+        TextView totalprice = view.findViewById(R.id.OrderTotalPrice);
+
+        //total price
+        Integer intamount = cursor.getInt(cursor.getColumnIndex("amount"));
+        Integer intprice = cursor.getInt(cursor.getColumnIndex("price"));
+        Integer total = intamount * intprice;
+
         item.setText(cursor.getString(cursor.getColumnIndex("name")));
+        amount.setText(cursor.getString(cursor.getColumnIndex("amount")) + " x ");
+        price.setText(cursor.getString(cursor.getColumnIndex("price")));
+        totalprice.setText("€ " + total.toString());
+
 
     }
 }

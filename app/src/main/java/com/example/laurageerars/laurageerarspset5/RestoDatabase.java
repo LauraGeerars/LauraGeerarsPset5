@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class RestoDatabase extends SQLiteOpenHelper {
     private static RestoDatabase instance;
-    private static String DB = "restaurant";
+    private static String DB = "orders";
     private static int version = 1;
 
     private RestoDatabase(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -48,29 +48,40 @@ public class RestoDatabase extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public void insert(String name, int price, int amount){
+    public void insert(String name, int price){
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM orders WHERE name = '" + name.toString() + "'", null);
-        if (cursor.getCount() != 0) {
-            update(cursor.getColumnIndex("_id"),cursor.getColumnIndex("amount") + amount);
+        ContentValues values =  new ContentValues();
+        if (cursor != null && cursor.moveToFirst()) {
+            Integer amountnumber = cursor.getInt(cursor.getColumnIndex("amount"));
+            int newamountnumber = 1 + amountnumber;
+            values.put("amount", newamountnumber);
+            db.update("orders", values, "name = ?", new String[]{name});
+
         }
 
         else {
-            ContentValues values = new ContentValues();
-            values.put("name", name);
-            values.put("price", price);
-            values.put("amount", amount);
-            db.insert("orders", null, values);
+            addItem(name, price);
         }
     }
 
+    public void addItem(String name, int price) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values =  new ContentValues();
+        values.put("name", name);
+        values.put("price", price);
+        values.put("amount", 1);
+        db.insert("orders",null, values);
+    }
+
+    /*
     public void update(long id, int amount) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("amount", amount);
         db.update("orders",values,"_id=" + id, null);
 
-    }
+    }*/
 
     public void delete(long id) {
         SQLiteDatabase db = getWritableDatabase();
@@ -81,5 +92,10 @@ public class RestoDatabase extends SQLiteOpenHelper {
     public void clear(){
         SQLiteDatabase db = getWritableDatabase();
         onUpgrade(db,1,2);
+    }
+
+    public void deleteAll() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete("orders", null, null);
     }
 }
