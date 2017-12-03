@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -42,12 +43,14 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
         adapter = new RestoAdapter(getContext(), cursor);
         ListView ListView = view.findViewById(R.id.order_list);
         ListView.setAdapter(adapter);
+        TextView Textview = view.findViewById(R.id.order_total);
+        String total = totalPrice(cursor);
+        Textview.setText(total);
         Button sendbutton = view.findViewById(R.id.sendOrder);
         Button cancelbutton = view.findViewById(R.id.cancelOrder);
         sendbutton.setOnClickListener(this);
         cancelbutton.setOnClickListener(this);
-
-
+        
         return view;
     }
 
@@ -70,10 +73,12 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
         Cursor cursor = db.selectAll();
         adapter.swapCursor(cursor);
         ListView ListView = getView().findViewById(R.id.order_list);
+        TextView Textview = getView().findViewById(R.id.order_total);
+        String total = totalPrice(cursor);
         ListView.setAdapter(adapter);
+        Textview.setText(total);
 
     }
-
 
     public void submitOrder(){
         RequestQueue queue = Volley.newRequestQueue(getContext());
@@ -105,6 +110,21 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
             }
         });
         queue.add(stringRequest);
+    }
+
+    public String totalPrice(Cursor cursor) {
+        int totalcount = 0;
+
+        while(cursor.moveToNext()) {
+
+            int totalsum = cursor.getInt(cursor.getColumnIndex("price")) * cursor.getInt(cursor.getColumnIndex("amount"));
+            totalcount += totalsum;
+        }
+
+        String totaloutput = "Total price of order is €" + totalcount;
+        return totaloutput;
+
+
     }
 
     public void clear() {
