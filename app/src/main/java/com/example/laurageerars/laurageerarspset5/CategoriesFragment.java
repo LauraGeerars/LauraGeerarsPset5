@@ -38,7 +38,6 @@ public class CategoriesFragment extends ListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //final TextView mTextView = (TextView) findViewById(R.id.textView);
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(getContext());
@@ -55,13 +54,11 @@ public class CategoriesFragment extends ListFragment {
                             ArrayList<JSONObject> listcategory = new ArrayList<JSONObject>();
                             JSONArray categoryArray = newObject.getJSONArray("categories");
                             for (int i = 0; i < categoryArray.length(); i++) {
-                                //mTextView.setText(menuArray.getJSONObject(i).getString("name"));
                                 addItem(categoryArray.get(i).toString());
                             }
                             Adapter();
 
                         } catch (JSONException e) {
-                            //mTextView.setText(e.toString());
                             e.printStackTrace();
 
 
@@ -81,17 +78,20 @@ public class CategoriesFragment extends ListFragment {
 
     }
 
-
+    //function for adding item to list categories
     public void addItem(String Item){
 
         listcategory.add(Item);
+
     }
 
+    //adapter function
     public void Adapter() {
         this.setListAdapter(new ArrayAdapter<String>(getContext(),  android.R.layout.simple_list_item_1, listcategory));
 
     }
 
+    //function for when clicking on a category on list, linking from category to menu
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);

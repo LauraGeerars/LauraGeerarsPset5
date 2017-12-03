@@ -41,19 +41,26 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
         RestoDatabase db = RestoDatabase.getInstance(getContext());
         Cursor cursor = db.selectAll();
         adapter = new RestoAdapter(getContext(), cursor);
+
+        //show dishes from order in listview
         ListView ListView = view.findViewById(R.id.order_list);
         ListView.setAdapter(adapter);
+
+        //show total price of order in textview
         TextView Textview = view.findViewById(R.id.order_total);
         String total = totalPrice(cursor);
         Textview.setText(total);
+
+        //fixing buttons on order with setOnClickListener
         Button sendbutton = view.findViewById(R.id.sendOrder);
         Button cancelbutton = view.findViewById(R.id.cancelOrder);
         sendbutton.setOnClickListener(this);
         cancelbutton.setOnClickListener(this);
-        
+
         return view;
     }
 
+    //function for sending order and cancel order by clearing the database, submitting order and updating data
     @Override
     public void onClick(View v) {
         RestoDatabase db = RestoDatabase.getInstance(getContext());
@@ -68,6 +75,7 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
         }
     }
 
+    //function for updating data in database
     private void updateData() {
         db = RestoDatabase.getInstance(getContext());
         Cursor cursor = db.selectAll();
@@ -80,6 +88,7 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
 
     }
 
+    //function for submitting order: POST method for getting preparation time
     public void submitOrder(){
         RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = "https://resto.mprog.nl/order";
@@ -99,7 +108,6 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
                         catch (JSONException e) {
                             e.printStackTrace();
 
-
                         }
 
                     }
@@ -109,29 +117,26 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
 
             }
         });
+
         queue.add(stringRequest);
     }
 
+    //function for calculating total price
     public String totalPrice(Cursor cursor) {
         int totalcount = 0;
 
         while(cursor.moveToNext()) {
 
+            //sum for total price: price * amount
             int totalsum = cursor.getInt(cursor.getColumnIndex("price")) * cursor.getInt(cursor.getColumnIndex("amount"));
             totalcount += totalsum;
         }
 
+        //total price returning
         String totaloutput = "Total price of order is €" + totalcount;
         return totaloutput;
 
 
-    }
-
-    public void clear() {
-        // Clear the database and close the dialog window
-        db.clear();
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(this).attach(this).commit();
     }
 
 }

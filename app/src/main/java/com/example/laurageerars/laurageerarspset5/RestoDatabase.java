@@ -21,6 +21,7 @@ public class RestoDatabase extends SQLiteOpenHelper {
         super(context, name, factory, version);
     }
 
+    //fix instances
     public static RestoDatabase getInstance(Context context) {
         if (instance == null) {
             instance = new RestoDatabase(context.getApplicationContext(), DB, null, version);
@@ -30,6 +31,7 @@ public class RestoDatabase extends SQLiteOpenHelper {
 
     }
 
+    //create table orders with id, name, price and amount of dishes
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table orders (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -37,6 +39,7 @@ public class RestoDatabase extends SQLiteOpenHelper {
 
     }
 
+    //upgrade database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + "orders");
@@ -44,17 +47,20 @@ public class RestoDatabase extends SQLiteOpenHelper {
 
     }
 
+    //select all from created table
     public Cursor selectAll() {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM orders", null);
         return cursor;
     }
 
+    //insert name and price in database
     public void insert(String name, int price) {
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM orders", null);
         ContentValues values = new ContentValues();
         Boolean New = true;
+        //if dish is already in order, increase amount
         while (cursor.moveToNext()) {
             if (Objects.equals(cursor.getString(cursor.getColumnIndex("name")), name)) {
                 New = false;
@@ -65,12 +71,14 @@ public class RestoDatabase extends SQLiteOpenHelper {
             }
         }
 
+        //if dish is not in order already, add new dish to order
         if (New) {
             addItem(name, price);
         }
 
     }
 
+    //add dish to order with name, price and amount as values
     public void addItem(String name, int price) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values =  new ContentValues();
@@ -80,28 +88,10 @@ public class RestoDatabase extends SQLiteOpenHelper {
         db.insert("orders",null, values);
     }
 
-    /*
-    public void update(long id, int amount) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("amount", amount);
-        db.update("orders",values,"_id=" + id, null);
-
-    }*/
-
-    public void delete(long id) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete("orders","_id = " + id,null);
-
-    }
-
+    //function for removing all items from the database
     public void clear(){
         SQLiteDatabase db = getWritableDatabase();
         onUpgrade(db,1,2);
     }
 
-    public void deleteAll() {
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete("orders", null, null);
-    }
 }

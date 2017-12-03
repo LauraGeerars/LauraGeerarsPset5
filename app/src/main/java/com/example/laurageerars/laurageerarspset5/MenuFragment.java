@@ -2,7 +2,6 @@ package com.example.laurageerars.laurageerarspset5;
 
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,7 +9,6 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -48,7 +46,6 @@ public class MenuFragment extends ListFragment {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = "https://resto.mprog.nl/menu";
 
-
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -61,8 +58,8 @@ public class MenuFragment extends ListFragment {
                                 JSONArray menuArray = newObject.getJSONArray("items");
                                 for (int i = 0; i < menuArray.length(); i++) {
                                     if (Objects.equals(menuArray.getJSONObject(i).getString("category"), CategoryMenu)) {
-                                        //String temp = menuArray.getJSONObject(i).getString("name") + " - € " + menuArray.getJSONObject(i).getString("price");
                                         addItem(menuArray.getJSONObject(i).getString("name"));
+                                        //add all values from category to a list menucomplete
                                         menucomplete.add(menuArray.getJSONObject(i));
                                     }
                                 }
@@ -91,25 +88,20 @@ public class MenuFragment extends ListFragment {
 
     }
 
+    //function to add dish (item) to a list
     public void addItem(String Item) {
 
         menucategory.add(Item);
+
     }
-/*
-    public void addPrice(String Item, String price) {
 
-        SharedPreferences yourOrderPrefs = getContext().getSharedPreferences("PriceStore", getContext().MODE_PRIVATE);
-        SharedPreferences.Editor prefsEditor = yourOrderPrefs.edit();
-        prefsEditor.putString(Item, price);
-        prefsEditor.commit();
-
-    }*/
-
+    //adapter function
     public void Adapter(ArrayList<String> menucategory) {
         this.setListAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, menucategory));
 
     }
 
+    //when clicking, add dish to order
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
@@ -122,6 +114,7 @@ public class MenuFragment extends ListFragment {
         toast.show();
         for (int s = 0; s < menucomplete.size(); s++) {
             try {
+                //adding price to the dish if name equals to item and insert to database
                 if (Objects.equals(menucomplete.get(s).getString("name"), item.toString())) {
                     int price = menucomplete.get(s).getInt("price");
                     db.insert(item.toString(), price);
@@ -135,9 +128,6 @@ public class MenuFragment extends ListFragment {
 
 
         }
-
-
-
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
