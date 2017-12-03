@@ -61,8 +61,7 @@ public class MenuFragment extends ListFragment {
                                         addItem(menuArray.getJSONObject(i).getString("name"));
                                         //add all values from category to a list menucomplete
                                         menucomplete.add(menuArray.getJSONObject(i));
-                                    }
-                                }
+                                    }}
 
                                 Adapter(menucategory);
 
@@ -71,8 +70,7 @@ public class MenuFragment extends ListFragment {
                                 e.printStackTrace();
 
 
-                            }
-                        }
+                            }}
 
                     }
 
@@ -118,16 +116,11 @@ public class MenuFragment extends ListFragment {
                 if (Objects.equals(menucomplete.get(s).getString("name"), item.toString())) {
                     int price = menucomplete.get(s).getInt("price");
                     db.insert(item.toString(), price);
-                }
-            }
+                }}
 
             catch(JSONException e) {
                     e.printStackTrace();
-                }
-            }
-
-
-        }
+                }}}
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,

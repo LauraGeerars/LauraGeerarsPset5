@@ -108,15 +108,12 @@ public class OrderFragment extends DialogFragment implements View.OnClickListene
                         catch (JSONException e) {
                             e.printStackTrace();
 
-                        }
-
-                    }
+                        }}
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-            }
-        });
+            }});
 
         queue.add(stringRequest);
     }
